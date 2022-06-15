@@ -1,26 +1,45 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Navigate, useRoutes } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { lazy } from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import { Login } from './pages/Login';
+import { NotFound } from './pages/NotFound';
+import { TaskLayout } from './layout/TaskLayout';
+
+const MainPage = lazy(() => import('./pages/MainPage'));
+const UserPage = lazy(() => import('./pages/UserPage'));
+const TaskPage = lazy(() => import('./pages/TaskPage'));
+
+const isAvailableLayout = window.localStorage.getItem('isAvailableLayout');
+
+function PrivateRoute({ component, ...rest}: any) {
+  const isAuthed = useSelector((state: any) => {
+    return state.user['isAuth'];
+  });
+  return isAuthed ? component : <Navigate to="/login" />;
 }
 
-export default App;
+export default function Router() {
+  return useRoutes([
+    {
+      path: '/tasks',
+      element: <TaskLayout />,
+      children: [
+        { path: 'user', element: <UserPage /> },
+        { path: 'tasks', element: <TaskPage /> },
+        { path: 'layout', element: isAvailableLayout ? <MainPage /> :<NotFound/>  }
+      ]
+    },
+    {
+      path: '/',
+      element: <Login />,
+      children: [
+        { path: '/', element: <Navigate to="/layout/main" /> },
+        { path: 'login', element: <Login /> }
+      ]
+    },
+    { path: '*', element: <NotFound /> }
+  ]);
+}
+
+export { PrivateRoute };
