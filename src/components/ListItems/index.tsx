@@ -1,5 +1,4 @@
 import * as React from 'react';
-import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import ListIcon from '@mui/icons-material/List';
@@ -12,7 +11,8 @@ import { Logo } from '../Logo';
 
 import {
     Link as RouterLink,
-    LinkProps as RouterLinkProps
+    LinkProps as RouterLinkProps,
+    useNavigate
   } from 'react-router-dom';
 import ListItem from '@mui/material/ListItem';
 import { styled } from '@mui/material/styles';
@@ -20,13 +20,12 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import { useState } from 'react';
-import Button from '@mui/material/Button';
 
 
 interface ListItemLinkProps {
     icon?: React.ReactElement;
     primary: string;
-    to?: string;
+    to: string;
   }
   
 const DashboardNavbarRoot = styled(MuiAppBar)(({ theme }) => ({
@@ -51,7 +50,7 @@ function ListItemLink(props: ListItemLinkProps) {
           itemProps,
           ref,
         ) {
-          return <RouterLink to={to ? to : '/tasks'} ref={ref} {...itemProps} role={undefined} />;
+          return <RouterLink to={to} ref={ref} {...itemProps} role={undefined} />;
         }),
       [to],
     );
@@ -71,8 +70,7 @@ export const ListItems = () =>{
         num1: Math.floor(Math.random() * 101),
         num2: Math.floor(Math.random() * 101)
     });
-
-    const [toLayout, setToLayout] = useState<string>();
+    const navigate = useNavigate();
 
     const clickMain = () => {
         setNums({
@@ -83,7 +81,7 @@ export const ListItems = () =>{
 
         if(Number(p) === Number(nums.num1+nums.num2)){
             window.localStorage.setItem('isAvailableLayout', 'true');
-            setToLayout('/layout');
+            navigate('/layout');
         }else{
             window.localStorage.setItem('isAvailableLayout', 'false');
             alert('Error, try again the sum of two numbers!');
@@ -125,7 +123,7 @@ export const ListItems = () =>{
         </Box>
         <List aria-label="main mailbox folders">
            <Box onClick={()=>clickMain()}>
-           <ListItemLink  primary="Главная" to={toLayout} icon={<AssignmentIcon />} />
+           <ListItemLink  primary="Главная" to="" icon={<AssignmentIcon />} />
            </Box>
             <ListItemLink to="/tasks" primary="Задачи" icon={<ListIcon />} />
         </List>

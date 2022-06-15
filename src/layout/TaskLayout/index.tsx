@@ -1,13 +1,9 @@
-import { Button, FormControl, InputLabel, MenuItem, Select, TextField } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box"
-import { styled } from "@mui/material/styles";
 import { BoxPattern } from "../../components/BoxPattern";
 import Header from "../../components/Header"
 import { ListItems } from "../../components/ListItems"
 import { TabsList } from "../../components/Tabs"
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { useState } from "react";
 import { SelectList } from "../../components/SelectList";
 import { DateItem } from "../../components/DateItem";
